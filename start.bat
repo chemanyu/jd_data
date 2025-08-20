@@ -2,7 +2,56 @@
 chcp 65001 >nul
 title 数据归因分析系统 - 启动脚本
 
-echo ===============================================
+echo ===::安装依赖
+echo [安装] 检查并安装项目依赖...
+if exist "requirements.txt" (
+    echo [信息] 发现 requirements.txt，正在安装依赖...
+    pip install -r requirements.txt
+    if errorlevel 1 (
+        echo [警告] 使用requirements.txt安装失败，尝试备用方案...
+        echo [信息] 使用国内镜像源重试...
+        pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
+        if errorlevel 1 (
+            if exist "requirements_simple.txt" (
+                echo [信息] 尝试使用简化依赖文件...
+                pip install -r requirements_simple.txt
+                if errorlevel 1 (
+                    pip install -r requirements_simple.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
+                )
+            )
+            if errorlevel 1 (
+                echo [信息] 尝试逐个安装基础依赖包...
+                pip install flask
+                pip install flask-login
+                pip install pymysql
+                pip install requests
+                pip install python-dotenv
+                pip install waitress
+                if errorlevel 1 (
+                    echo [错误] 所有安装方案都失败了
+                    echo [建议] 请检查网络连接或手动安装依赖
+                    echo [建议] 可以尝试运行: pip install flask flask-login pymysql requests
+                    pause
+                    exit /b 1
+                )
+            )
+        )
+    )
+    echo [成功] 依赖安装完成
+) else (
+    echo [警告] 未找到 requirements.txt 文件
+    echo [信息] 尝试安装基础依赖...
+    pip install flask flask-login pymysql requests python-dotenv waitress
+    if errorlevel 1 (
+        echo [信息] 使用国内镜像源重试...
+        pip install flask flask-login pymysql requests python-dotenv waitress -i https://pypi.tuna.tsinghua.edu.cn/simple/
+        if errorlevel 1 (
+            echo [错误] 安装基础依赖失败
+            pause
+            exit /b 1
+        )
+    )
+)============================
 echo    数据归因分析系统 - Windows 启动脚本
 echo ===============================================
 echo.
