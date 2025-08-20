@@ -97,9 +97,8 @@
 // 页面加载时设置默认日期
 document.addEventListener('DOMContentLoaded', function() {
     const dateInput = document.getElementById('queryDate');
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    dateInput.value = yesterday.toISOString().split('T')[0];
+    const today = new Date();
+    dateInput.value = today.toISOString().split('T')[0];
 });
 
 // 处理查询表单提交
@@ -159,7 +158,12 @@ function displayResults(data, queryDate, accountFilter) {
         });
     }
     
-    const totalFilteredRequests = Object.values(filteredTotalRequests).reduce((sum, count) => sum + count, 0);
+    const totalFilteredRequests = Object.entries(filteredTotalRequests).reduce((sum, [key, count]) => {
+        if (!key.startsWith('error_')) {
+            return sum + count;
+        }
+        return sum;
+    }, 0);  
     const totalFilteredErrors = Object.values(filteredErrorCounts).reduce((sum, errors) => {
         return sum + Object.values(errors).reduce((s, c) => s + c, 0);
     }, 0);
