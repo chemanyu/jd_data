@@ -3,7 +3,7 @@ import pymysql
 DB_CONFIG = {
     'host': '127.0.0.1',
     'user': 'root',
-    'password': '',
+    'password': '123456',
     'database': 'release_atd',
     'charset': 'utf8mb4'
 }
