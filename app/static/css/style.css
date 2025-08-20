@@ -1,0 +1,411 @@
+/* 自定义样式 */
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #495057;
+}
+
+.badge {
+    font-size: 0.875em;
+}
+
+/* 登录页面样式 */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 折叠面板样式增强 */
+.accordion-button {
+    font-weight: 500;
+    background-color: #f8f9fa;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid #dee2e6;
+    padding: 1rem 1.25rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #e7f1ff;
+    border-color: #b8daff;
+    box-shadow: 0 0 0 0.125rem rgba(13, 110, 253, 0.25);
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    border-color: #86b7fe;
+}
+
+.accordion-button:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.accordion-body {
+    padding: 1rem 1.25rem;
+}
+
+.accordion-collapse {
+    transition: height 0.35s ease;
+}
+
+/* 折叠按钮文本样式 */
+.accordion-button small.text-muted {
+    font-size: 0.8rem;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+.accordion-button:hover small.text-muted {
+    opacity: 1;
+}
+
+/* 折叠按钮图标旋转动画 */
+.accordion-button::after {
+    transition: transform 0.2s ease-in-out;
+    background-size: 1.25rem;
+}
+
+.accordion-button:not(.collapsed)::after {
+    transform: rotate(180deg);
+}
+
+/* 折叠按钮内容布局 */
+.accordion-button .d-flex {
+    align-items: center;
+}
+
+/* 折叠控制按钮样式 */
+.btn-group-sm .btn {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    transition: all 0.15s ease-in-out;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 0.125rem 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 0.125rem 0.25rem rgba(108, 117, 125, 0.25);
+}
+
+/* 进度条样式 */
+.progress {
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    background-color: #0d6efd;
+    transition: width 0.6s ease;
+}
+
+/* 表格样式增强 */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.025);
+}
+
+.table-sm th,
+.table-sm td {
+    padding: 0.5rem;
+}
+
+/* 表格宽度控制 */
+.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: 0.375rem;
+}
+
+.table {
+    table-layout: fixed;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+/* 账户ID列样式 */
+.table th:first-child,
+.table td:first-child {
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
+}
+
+/* 数字列样式 */
+.table th:nth-child(2),
+.table td:nth-child(2),
+.table th:nth-child(3),
+.table td:nth-child(3) {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+    text-align: right;
+}
+
+/* 进度条列样式 */
+.table th:nth-child(4),
+.table td:nth-child(4) {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+/* 文本截断处理 */
+.table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    position: relative;
+}
+
+/* 账户ID徽章样式优化 */
+.badge.bg-secondary {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    font-family: monospace;
+    font-size: 0.75rem;
+}
+
+/* 工具提示样式 */
+.table td[title] {
+    cursor: help;
+}
+
+.table td[title]:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+/* 错误类型表格特殊样式 */
+.table th:first-child,
+.table td:first-child {
+    width: 200px;
+}
+
+.table.error-table th:first-child,
+.table.error-table td:first-child {
+    width: 150px;
+}
+
+.table.error-table th:nth-child(2),
+.table.error-table td:nth-child(2) {
+    width: 250px;
+}
+
+.table.error-table th:nth-child(3),
+.table.error-table td:nth-child(3),
+.table.error-table th:nth-child(4),
+.table.error-table td:nth-child(4) {
+    width: 100px;
+}
+
+/* 统计卡片样式 */
+.card.bg-primary h4,
+.card.bg-primary h6 {
+    color: white !important;
+}
+
+.card.bg-danger h4,
+.card.bg-danger h6 {
+    color: white !important;
+}
+
+.card.bg-success h4,
+.card.bg-success h6 {
+    color: white !important;
+}
+
+/* 快速访问区域样式 */
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+.bg-light:hover {
+    background-color: #e9ecef !important;
+    transition: background-color 0.15s ease-in-out;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .accordion-button {
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+    }
+    
+    /* 移动设备上折叠控制栏的布局 */
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .d-flex.justify-content-between h5 {
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-group-sm {
+        align-self: stretch;
+    }
+    
+    .btn-group-sm .btn {
+        flex: 1;
+        font-size: 0.8rem;
+    }
+    
+    /* 移动设备上折叠按钮的优化 */
+    .accordion-button {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .accordion-button .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.5rem;
+    }
+    
+    .accordion-button .d-flex > div:last-child {
+        align-self: flex-end;
+    }
+    
+    .accordion-button small.text-muted {
+        font-size: 0.75rem;
+    }
+}
+
+/* 加载动画 */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* 状态颜色 */
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}
+
+/* 卡片动画 */
+.card-animate {
+    animation: fadeInUp 0.5s ease-in-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 按钮样式增强 */
+.btn {
+    border-radius: 0.375rem;
+    font-weight: 500;
+}
+
+.btn-group-sm > .btn,
+.btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* 错误类型代码样式 */
+code {
+    color: #e83e8c;
+    background-color: #f8f9fa;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 85%;
+}
+
+code.small {
+    font-size: 0.75rem;
+}
+
+/* 数字格式化 */
+.text-end {
+    text-align: right !important;
+}
+
+/* 搜索输入框样式 */
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* 工具提示样式 */
+.tooltip {
+    font-size: 0.875rem;
+}
+
+/* 警告样式 */
+.alert {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* 链接样式 */
+a.text-decoration-none:hover {
+    text-decoration: underline !important;
+}

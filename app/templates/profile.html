@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}个人资料 - 数据归因分析系统{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-user-cog me-2"></i>个人资料
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-edit me-2"></i>编辑个人信息
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">用户名</label>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               value="{{ current_user.username }}" readonly>
+                        <small class="form-text text-muted">用户名不可修改</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">邮箱</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               value="{{ current_user.email or '' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">当前密码</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password">
+                        <small class="form-text text-muted">如需修改密码，请输入当前密码</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">新密码</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">确认新密码</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>保存更改
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>账户信息
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>用户名:</strong><br>
+                    <span class="text-muted">{{ current_user.username }}</span>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>邮箱:</strong><br>
+                    <span class="text-muted">{{ current_user.email or '未设置' }}</span>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>注册时间:</strong><br>
+                    <span class="text-muted">{{ current_user.created_at.strftime('%Y-%m-%d %H:%M:%S') if current_user.created_at else '未知' }}</span>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>账户状态:</strong><br>
+                    <span class="badge bg-{{ 'success' if current_user.is_active else 'danger' }}">
+                        {{ '激活' if current_user.is_active else '禁用' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
