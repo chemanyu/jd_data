@@ -3,7 +3,7 @@ import pymysql
 DB_CONFIG = {
     'host': '127.0.0.1',
     'user': 'root',
-    'password': '123456',
+    'password': '',
     'database': 'release_atd',
     'charset': 'utf8mb4'
 }
@@ -58,8 +58,8 @@ def init_db():
             cursor.execute("SELECT COUNT(*) FROM users WHERE username = 'admin'")
             result = cursor.fetchone()
             if result[0] == 0:
-                from werkzeug.security import generate_password_hash
-                admin_password = generate_password_hash('admin123')
+                import hashlib
+                admin_password = hashlib.md5('admin123'.encode()).hexdigest()
                 cursor.execute("""
                     INSERT INTO users (username, password_hash, email) 
                     VALUES ('admin', %s, 'admin@example.com')

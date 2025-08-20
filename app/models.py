@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from werkzeug.security import check_password_hash, generate_password_hash
+import hashlib
 from app.database import execute_query, execute_update
 
 class User(UserMixin):
@@ -37,12 +37,14 @@ class User(UserMixin):
     
     def check_password(self, password):
         """检查密码是否正确"""
-        return check_password_hash(self.password_hash, password)
+        input_password_hash = hashlib.md5(password.encode()).hexdigest()
+        print(input_password_hash)
+        return self.password_hash == input_password_hash
     
     @staticmethod
     def create(username, password, email):
         """创建新用户"""
-        password_hash = generate_password_hash(password)
+        password_hash = hashlib.md5(password.encode()).hexdigest()
         sql = "INSERT INTO users (username, password_hash, email) VALUES (%s, %s, %s)"
         try:
             execute_update(sql, (username, password_hash, email))
