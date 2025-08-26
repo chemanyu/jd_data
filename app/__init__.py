@@ -18,7 +18,7 @@ def create_app():
     )
     
     # 配置子路径 - 匹配nginx反向代理路径
-    app.config['APPLICATION_ROOT'] = '/guangyixin'
+    app.config['APPLICATION_ROOT'] = 'guangyixin'
     
     # 添加子路径处理中间件
     class SubPathMiddleware:
@@ -36,7 +36,7 @@ def create_app():
             return self.app(environ, start_response)
     
     # 应用中间件
-    app.wsgi_app = SubPathMiddleware(app.wsgi_app, '/guangyixin')
+    app.wsgi_app = SubPathMiddleware(app.wsgi_app, 'guangyixin')
     
     # 如果使用HTTPS，强制使用HTTPS scheme
     app.config['PREFERRED_URL_SCHEME'] = 'https'
