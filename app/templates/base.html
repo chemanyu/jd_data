@@ -28,7 +28,7 @@
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    {% if current_user.is_authenticated %}
+                    <!-- 导航菜单 - 移除登录检查，直接显示所有菜单 -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('main.dashboard') }}">
                             <i class="fas fa-tachometer-alt me-1"></i>仪表盘
@@ -39,9 +39,9 @@
                             <i class="fas fa-history me-1"></i>查询历史
                         </a>
                     </li>
-                    {% endif %}
                 </ul>
                 
+                {# 用户认证相关导航 - 已注释掉登录功能
                 <ul class="navbar-nav">
                     {% if current_user.is_authenticated %}
                     <li class="nav-item dropdown">
@@ -66,6 +66,7 @@
                     </li>
                     {% endif %}
                 </ul>
+                #}
             </div>
         </div>
     </nav>
