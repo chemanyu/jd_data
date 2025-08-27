@@ -118,7 +118,7 @@ document.getElementById('queryForm').addEventListener('submit', async function(e
     queryBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>查询中...';
     
     try {
-        const response = await fetch(`/api/data?date=${queryDate}`);
+        const response = await fetch(`/guangyixin/api/data?date=${queryDate}`);
         const data = await response.json();
         
         if (response.ok) {
