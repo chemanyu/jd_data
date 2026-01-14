@@ -165,9 +165,10 @@ def export_error_counts():
         ws.column_dimensions['B'].width = 18
         ws.column_dimensions['C'].width = 25
         ws.column_dimensions['D'].width = 12
+        ws.column_dimensions['E'].width = 12
         
         # 写入标题
-        headers = ["日期", "账户ID", "错误类型", "错误数量"]
+        headers = ["日期", "账户ID", "错误类型", "事件", "错误数量"]
         for col_idx, header in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col_idx)
             cell.value = header
@@ -191,17 +192,29 @@ def export_error_counts():
                 for error_type in sorted(errors.keys()):
                     error_count = errors[error_type]
                     
+                    # 拆分错误类型和事件
+                    # 例如: "advertiser_rate_false_1" -> ("advertiser_rate_false", "1")
+                    # 如果没有下划线+数字后缀，事件列为空
+                    parts = error_type.rsplit('_', 1)
+                    if len(parts) == 2 and parts[1].isdigit():
+                        error_category = parts[0]
+                        event_number = parts[1]
+                    else:
+                        error_category = error_type
+                        event_number = ""
+                    
                     # 写入数据
                     ws.cell(row=row, column=1).value = date_str
                     ws.cell(row=row, column=2).value = advertiser_id
-                    ws.cell(row=row, column=3).value = error_type
-                    ws.cell(row=row, column=4).value = error_count
+                    ws.cell(row=row, column=3).value = error_category
+                    ws.cell(row=row, column=4).value = event_number
+                    ws.cell(row=row, column=5).value = error_count
                     
                     # 应用样式
-                    for col in range(1, 5):
+                    for col in range(1, 6):
                         cell = ws.cell(row=row, column=col)
                         cell.border = border
-                        if col == 4:  # 数字列居中
+                        if col in [4, 5]:  # 数字列居中
                             cell.alignment = center_alignment
                     
                     row += 1
