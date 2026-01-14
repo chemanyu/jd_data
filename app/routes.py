@@ -1,8 +1,17 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, send_file
 # from flask_login import login_user, logout_user, login_required, current_user  # 已注释掉登录相关导入
 from datetime import datetime, timedelta
 from app.models import User, QueryLog
 from app.api_client import APIClient
+from io import BytesIO
+import os
+
+try:
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+    OPENPYXL_AVAILABLE = True
+except ImportError:
+    OPENPYXL_AVAILABLE = False
 
 # 创建蓝图
 main_bp = Blueprint('main', __name__)
@@ -112,17 +121,109 @@ def api_data():
     
     return jsonify(parsed_data)
 
-@main_bp.route('/history')
-# @login_required  # 已注释掉登录要求
-def query_history():
-    """查询历史记录页面"""
-    page = request.args.get('page', 1, type=int)
-    # logs = QueryLog.get_user_logs(current_user.id, limit=20)  # 暂时注释掉
-    logs = []  # 临时设置为空列表
-    return render_template('history.html', logs=logs)
 
 @main_bp.route('/profile')
 # @login_required  # 已注释掉登录要求
 def profile():
     """用户资料页面"""
     return render_template('profile.html')
+
+@main_bp.route('/export/error-counts-excel')
+# @login_required  # 已注释掉登录要求
+def export_error_counts():
+    """导出过去10天的错误统计数据为Excel"""
+    if not OPENPYXL_AVAILABLE:
+        return jsonify({'error': '缺少openpyxl库，请先安装'}), 500
+    
+    try:
+        api_client = APIClient()
+        
+        # 获取过去10天的数据
+        multi_days_data = api_client.get_multi_days_error_data(num_days=10)
+        
+        if not multi_days_data:
+            return jsonify({'error': '无法获取数据，请稍后重试'}), 500
+        
+        # 创建 Excel 工作簿
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "错误统计"
+        
+        # 定义样式
+        header_fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+        header_font = Font(bold=True, color="FFFFFF", size=11)
+        center_alignment = Alignment(horizontal="center", vertical="center")
+        border = Border(
+            left=Side(style='thin'),
+            right=Side(style='thin'),
+            top=Side(style='thin'),
+            bottom=Side(style='thin')
+        )
+        
+        # 设置列宽
+        ws.column_dimensions['A'].width = 12
+        ws.column_dimensions['B'].width = 18
+        ws.column_dimensions['C'].width = 25
+        ws.column_dimensions['D'].width = 12
+        
+        # 写入标题
+        headers = ["日期", "账户ID", "错误类型", "错误数量"]
+        for col_idx, header in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=col_idx)
+            cell.value = header
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = center_alignment
+            cell.border = border
+        
+        # 按日期降序排列（从最新开始）
+        sorted_dates = sorted(multi_days_data.keys(), reverse=True)
+        
+        row = 2
+        for date_str in sorted_dates:
+            error_counts = multi_days_data[date_str]
+            
+            # 按账户ID排序
+            for advertiser_id in sorted(error_counts.keys()):
+                errors = error_counts[advertiser_id]
+                
+                # 按错误类型排序
+                for error_type in sorted(errors.keys()):
+                    error_count = errors[error_type]
+                    
+                    # 写入数据
+                    ws.cell(row=row, column=1).value = date_str
+                    ws.cell(row=row, column=2).value = advertiser_id
+                    ws.cell(row=row, column=3).value = error_type
+                    ws.cell(row=row, column=4).value = error_count
+                    
+                    # 应用样式
+                    for col in range(1, 5):
+                        cell = ws.cell(row=row, column=col)
+                        cell.border = border
+                        if col == 4:  # 数字列居中
+                            cell.alignment = center_alignment
+                    
+                    row += 1
+        
+        # 在内存中创建 Excel 文件
+        excel_file = BytesIO()
+        wb.save(excel_file)
+        excel_file.seek(0)
+        
+        # 生成文件名
+        export_date = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f"error_counts_{export_date}.xlsx"
+        
+        # 返回 Excel 文件
+        return send_file(
+            excel_file,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name=filename
+        )
+        
+    except Exception as e:
+        print(f"导出Excel出错: {e}")
+        return jsonify({'error': f'导出失败: {str(e)}'}), 500
+

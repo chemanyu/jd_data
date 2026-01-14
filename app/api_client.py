@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class APIClient:
     def __init__(self):
@@ -131,3 +131,35 @@ class APIClient:
                 'error_types': error_types_with_desc
             }
         }
+    
+    def get_multi_days_error_data(self, num_days=10):
+        """
+        获取过去N天的错误数据
+        
+        Args:
+            num_days (int): 获取过去多少天的数据，默认10天
+            
+        Returns:
+            dict: 合并后的错误数据，格式为 {date: {advertiser_id: {error_type: count}}}
+        """
+        all_data = {}
+        
+        for i in range(num_days):
+            # 计算日期
+            target_date = datetime.now() - timedelta(days=i)
+            date_str = target_date.strftime('%Y%m%d')
+            
+            try:
+                # 获取该天数据
+                raw_data = self.get_attribution_data(date_str)
+                if raw_data and raw_data.get('code') == 0:
+                    parsed_data = self.parse_api_response(raw_data)
+                    if parsed_data:
+                        all_data[date_str] = parsed_data.get('error_counts', {})
+                        print(f"成功获取 {date_str} 的数据")
+                else:
+                    print(f"获取 {date_str} 的数据失败")
+            except Exception as e:
+                print(f"获取 {date_str} 的数据异常: {e}")
+        
+        return all_data
